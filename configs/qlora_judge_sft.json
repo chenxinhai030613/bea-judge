@@ -1,0 +1,42 @@
+{
+  "base_model": "models/M-Prometheus-3B",
+  "output_dir": "models/m_prometheus_3b_qlora_pairwise",
+  "data": {
+    "input_dataset": "datasets/processed/bea_judge_cleaned_10000.json",
+    "output_dir": "datasets/sft/m_prometheus_pairwise",
+    "task": "pairwise_only"
+  },
+  "qlora": {
+    "load_in_4bit": true,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_use_double_quant": true,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "training": {
+    "max_seq_length": 2048,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 16,
+    "learning_rate": 0.0001,
+    "num_train_epochs": 2,
+    "warmup_ratio": 0.03,
+    "weight_decay": 0.01,
+    "lr_scheduler_type": "cosine",
+    "gradient_checkpointing": true,
+    "max_grad_norm": 1.0,
+    "eval_steps": 200,
+    "save_strategy": "epoch",
+    "seed": 42
+  }
+}

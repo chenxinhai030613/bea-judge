@@ -1,0 +1,63 @@
+{
+  "total_records": 20000,
+  "by_language": {
+    "en": 12000,
+    "zh": 8000
+  },
+  "by_split": {
+    "test": 2931,
+    "train": 14100,
+    "dev": 2969
+  },
+  "by_task_type": {
+    "paper_qa": 4499,
+    "qa": 3899,
+    "claim_verification": 1593,
+    "multi_choice": 2229,
+    "metadata_qa": 7780
+  },
+  "by_domain": {
+    "scientific_literature": 12279,
+    "biomedical": 3000,
+    "scientific_claim_verification": 980,
+    "stem": 1439,
+    "academic_open_qa": 1231,
+    "academic_reasoning": 286,
+    "scientific_fact_verification": 565,
+    "methodology": 220
+  },
+  "by_source_dataset": {
+    "qasper": 4499,
+    "medquad": 2000,
+    "pubmedqa": 1000,
+    "scifact": 980,
+    "qasc": 991,
+    "sciq": 448,
+    "bea_judge_pandalm": 24,
+    "bea_judge_mt_bench": 106,
+    "bea_judge_synthetic_perturbed": 244,
+    "bea_judge_judgebench": 42,
+    "bea_judge_ares_nq": 484,
+    "bea_judge_wikieval": 15,
+    "bea_judge_helpsteer2": 588,
+    "bea_judge_oasst1": 76,
+    "bea_judge_offsetbias": 437,
+    "bea_judge_ragtruth": 66,
+    "csl_title": 4020,
+    "csl_keywords": 3760,
+    "bea_judge_zh_professional_bias": 67,
+    "bea_judge_zh_professional_open_qa": 105,
+    "bea_judge_zh_professional_factuality": 48
+  },
+  "missing_required_fields": [],
+  "duplicate_ids": [],
+  "bad_licenses": [],
+  "checks": {
+    "total_18k_22k": true,
+    "english_11p5k_12p5k": true,
+    "chinese_7p5k_8p5k": true,
+    "schema_required_fields": true,
+    "license_no_restricted_markers": true,
+    "all_passed": true
+  }
+}

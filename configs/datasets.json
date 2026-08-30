@@ -1,0 +1,9 @@
+{
+  "core_input": "datasets/processed/bea_judge_core_2400.json",
+  "default_output_dir": "datasets/judge_outputs",
+  "supported_tasks": [
+    "open_qa",
+    "pairwise_bias",
+    "factuality_rag"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "m_prometheus_3b_base",
+  "version": "Unbabel/M-Prometheus-3B",
+  "backend": "m_prometheus",
+  "model_path": "models/M-Prometheus-3B",
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "supported_modes": ["pairwise", "direct"],
+  "mode": "pairwise",
+  "prompt_template": "m_prometheus_pairwise_v1",
+  "max_new_tokens": 256,
+  "device": "auto",
+  "allow_fallback": false,
+  "output_schema": {
+    "raw_output": "text",
+    "parsed_label": "A>B | B>A | Tie",
+    "parsed_scores": {
+      "score_a": "float for pairwise",
+      "score_b": "float for pairwise",
+      "overall_score": "float 1-5 for direct scoring",
+      "relevance": "float 1-5 for direct scoring",
+      "completeness": "float 1-5 for direct scoring",
+      "factuality": "float 1-5 for direct scoring",
+      "instruction_following": "float 1-5 for direct scoring",
+      "clarity": "float 1-5 for direct scoring",
+      "safety": "float 1-5 for direct scoring"
+    },
+    "judge_backend": "m_prometheus | prometheus2 | heuristic | heuristic_fallback",
+    "parse_status": "ok | fallback_ok | failed | backend_error",
+    "backend_status": "runtime metadata including dependency availability"
+  }
+}

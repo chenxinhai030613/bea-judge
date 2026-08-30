@@ -1,0 +1,286 @@
+{
+  "name": "qlora_bea_judge_next_experiments",
+  "version": "2026-05-28",
+  "objective": "Lock the current dual-operating-point QLoRA-BEA-Judge result and define the next comparison, ablation, tie-robustness, and calibration experiments needed for a journal submission.",
+  "stable_protocol": {
+    "config": "configs/qlora_judge_sft_24gb_epoch1_1024.json",
+    "seeds": [
+      "13",
+      "42",
+      "2026"
+    ],
+    "max_seq_length": 1024,
+    "gpu_profile": "single RTX 4090 24GB",
+    "runner": "scripts/run_qlora_3seed_epoch1.sh",
+    "submission_summary": "datasets/model_outputs/qlora_3seed_epoch1_1024_summary/qlora_submission_ready_results.json",
+    "validation_command": ".venv_qlora/bin/python scripts/validate_qlora_submission_package.py"
+  },
+  "reporting_policy": {
+    "primary_claim": "Use the accuracy-oriented operating point for the main accuracy, macro-F1, and ECE claim.",
+    "secondary_claim": "Use the dev-selected tie-sensitive operating point for Tie recall-sensitive evaluation.",
+    "constraint": "Do not report one operating point as simultaneously optimal for accuracy, calibration, and Tie recall unless the same test operating point passes all gates."
+  },
+  "global_metrics": [
+    "accuracy",
+    "macro_f1",
+    "ece",
+    "tie_recall"
+  ],
+  "experiment_groups": [
+    {
+      "id": "main_comparison",
+      "priority": "P0",
+      "purpose": "Establish the headline comparison against raw frozen judge and frozen four-module BEA-Judge.",
+      "experiments": [
+        {
+          "id": "frozen_raw_vs_frozen_bea_vs_qlora_raw_vs_qlora_bea",
+          "table": "main_results",
+          "existing_artifacts": [
+            "datasets/model_outputs/qlora_3seed_epoch1_1024_summary/three_seed_summary.json",
+            "datasets/model_outputs/qlora_3seed_epoch1_1024_tie_sensitive_dev_summary/three_seed_summary.json",
+            "datasets/model_outputs/qlora_3seed_epoch1_1024_summary/qlora_submission_ready_results.json"
+          ],
+          "command": "RUN_TIE_SENSITIVE=1 SEEDS=\"13 42 2026\" bash scripts/run_qlora_3seed_epoch1.sh",
+          "metrics": [
+            "accuracy",
+            "macro_f1",
+            "ece",
+            "tie_recall"
+          ],
+          "gate": {
+            "macro_f1_gain_over_current_min": 0.02,
+            "ece_max": 0.06,
+            "submission_package_must_validate": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "qlora_training_ablation",
+      "priority": "P1",
+      "purpose": "Show that the improvement comes from QLoRA adaptation rather than only from the downstream four-module fusion.",
+      "experiments": [
+        {
+          "id": "raw_frozen_vs_raw_qlora",
+          "table": "training_ablation",
+          "existing_artifacts": [
+            "datasets/judge_outputs/m_prometheus_3b_bea10k_v2/summary.json",
+            "datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed13_epoch1_1024/summary.json",
+            "datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed42_epoch1_1024/summary.json",
+            "datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed2026_epoch1_1024/summary.json"
+          ],
+          "command": ".venv_qlora/bin/python scripts/compare_qlora_experiments.py --frozen-report datasets/model_outputs/bea_judge_20260521_110114/validation_report.json --qlora-report datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024/validation_report.json --raw-frozen-summary datasets/judge_outputs/m_prometheus_3b_bea10k_v2/summary.json --raw-qlora-scores datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed{seed}_epoch1_1024/base_scores.json --output-dir datasets/model_outputs/qlora_comparison_seed{seed}_epoch1_1024",
+          "metrics": [
+            "raw_accuracy",
+            "raw_macro_f1",
+            "parse_failure_rate"
+          ],
+          "gate": {
+            "raw_qlora_macro_f1_gain_min": 0.10,
+            "raw_qlora_parse_failure_max": 0.01
+          }
+        },
+        {
+          "id": "epoch_ablation",
+          "table": "epoch_ablation",
+          "command": "GROUP=epoch SEEDS=\"13 42 2026\" CONFIG=configs/qlora_judge_sft_24gb_epoch1_1024.json bash scripts/run_qlora_ablation_grid.sh",
+          "postprocess_command": ".venv_qlora/bin/python scripts/summarize_qlora_ablation_grid.py --settings epoch0p5_1024 epoch1_1024 epoch2_1024 --seeds 13 42 2026 --report-template datasets/model_outputs/qlora_comparison_seed{seed}_{setting}/qlora_comparison_report.json --output-json datasets/model_outputs/qlora_epoch_ablation_3seed_1024_summary/epoch_ablation_summary.json --output-md datasets/model_outputs/qlora_epoch_ablation_3seed_1024_summary/epoch_ablation_summary.md --title 'QLoRA Epoch Ablation Summary'",
+          "metrics": [
+            "raw_accuracy",
+            "raw_macro_f1",
+            "raw_ece",
+            "raw_tie_recall",
+            "qlora_bea_accuracy",
+            "qlora_bea_macro_f1",
+            "qlora_bea_ece",
+            "qlora_bea_tie_recall"
+          ],
+          "gate": {
+            "all_settings_run_for_all_stable_seeds": true,
+            "report_mean_std": true,
+            "epoch1_kept_as_reference": true
+          }
+        },
+        {
+          "id": "sft_size_ablation",
+          "table": "sft_size_ablation",
+          "command": "GROUP=sft_size SEEDS=\"13 42 2026\" CONFIG=configs/qlora_judge_sft_24gb_epoch1_1024.json bash scripts/run_qlora_ablation_grid.sh",
+          "precondition_command": ".venv_qlora/bin/python scripts/build_qlora_sft_subsets.py --source-dir datasets/sft/m_prometheus_pairwise --output-root datasets/sft --sample-sizes 1202 2403 --seed 42",
+          "postprocess_command": ".venv_qlora/bin/python scripts/summarize_qlora_ablation_grid.py --settings sft25_epoch1_1024 sft50_epoch1_1024 sft100_epoch1_1024 --seeds 13 42 2026 --report-template datasets/model_outputs/qlora_comparison_seed{seed}_{setting}/qlora_comparison_report.json --output-json datasets/model_outputs/qlora_sft_size_ablation_3seed_1024_summary/sft_size_ablation_summary.json --output-md datasets/model_outputs/qlora_sft_size_ablation_3seed_1024_summary/sft_size_ablation_summary.md --title 'QLoRA SFT Size Ablation Summary'",
+          "metrics": [
+            "raw_accuracy",
+            "raw_macro_f1",
+            "raw_ece",
+            "raw_tie_recall",
+            "qlora_bea_accuracy",
+            "qlora_bea_macro_f1",
+            "qlora_bea_ece",
+            "qlora_bea_tie_recall"
+          ],
+          "gate": {
+            "stratified_subset_required": true,
+            "all_settings_run_for_all_stable_seeds": true,
+            "report_mean_std": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "four_module_ablation",
+      "priority": "P1",
+      "purpose": "Quantify the contribution of the base judge score module, bias-awareness module, evidence module, and fusion/calibration module.",
+      "experiments": [
+        {
+          "id": "frozen_four_module_ablation",
+          "table": "module_ablation",
+          "existing_artifacts": [
+            "datasets/model_outputs/latest_ablation_report.json",
+            "datasets/model_outputs/sci_tables_v2_20260521_110114/ablation_table.md"
+          ],
+          "command": ".venv_qlora/bin/python scripts/bea_judge_ablation.py --judge-output datasets/judge_outputs/m_prometheus_3b_bea10k_v2/base_scores.repaired.json --input datasets/processed/bea_judge_cleaned_10000.json --model-json datasets/model_outputs/bea_judge_20260521_110114/model.json --report-json datasets/model_outputs/frozen_four_module_ablation/ablation_report.json",
+          "variants": [
+            "Full BEA-Judge",
+            "w/o Base Judge Scores",
+            "w/o Bias Module",
+            "w/o Evidence Module",
+            "w/o Calibration",
+            "w/o Tie Policy",
+            "w/o Review Threshold",
+            "Text/metadata-only",
+            "Base + fusion calibration only"
+          ],
+          "metrics": [
+            "pairwise_accuracy",
+            "pairwise_macro_f1",
+            "pairwise_ece",
+            "pairwise_tie_recall",
+            "factuality_macro_f1",
+            "factuality_ece"
+          ],
+          "gate": {
+            "full_model_macro_f1_must_be_best_or_statistically_tied": true,
+            "no_calibration_ece_must_not_improve": true
+          }
+        },
+        {
+          "id": "qlora_four_module_replay",
+          "table": "module_ablation_qlora_replay",
+          "command": ".venv_qlora/bin/python scripts/bea_judge_ablation.py --reuse-model-only --judge-output datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed{seed}_epoch1_1024/base_scores_all.json --input datasets/processed/bea_judge_cleaned_10000.json --model-json datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024/model.json --report-json datasets/model_outputs/qlora_ablation_seed{seed}_epoch1_1024/ablation_report.json",
+          "smoke_command": ".venv_qlora/bin/python scripts/bea_judge_ablation.py --reuse-model-only --sample-limit 80 --judge-output datasets/judge_outputs/m_prometheus_3b_qlora_pairwise_seed{seed}_epoch1_1024/base_scores_all.json --input datasets/processed/bea_judge_cleaned_10000.json --model-json datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024/model.json --report-json datasets/model_outputs/qlora_ablation_seed{seed}_epoch1_1024_smoke/ablation_report.json",
+          "postprocess_command": ".venv_qlora/bin/python scripts/summarize_qlora_ablation_3seed.py --seeds 13 42 2026 --report-template datasets/model_outputs/qlora_ablation_seed{seed}_epoch1_1024/ablation_report.json --output-dir datasets/model_outputs/qlora_ablation_3seed_epoch1_1024_summary",
+          "variants": [
+            "Full BEA-Judge",
+            "w/o Base Judge Scores",
+            "w/o Bias Module",
+            "w/o Evidence Module",
+            "w/o Calibration",
+            "w/o Tie Policy",
+            "w/o Review Threshold"
+          ],
+          "metrics": [
+            "pairwise_accuracy",
+            "pairwise_macro_f1",
+            "pairwise_ece",
+            "pairwise_tie_recall"
+          ],
+          "gate": {
+            "run_for_all_stable_seeds": true,
+            "report_mean_std": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "tie_policy_robustness",
+      "priority": "P0",
+      "purpose": "Resolve the low Tie recall risk by auditing dev-selected Tie policies and reporting the accuracy trade-off explicitly.",
+      "experiments": [
+        {
+          "id": "dev_selected_tie_sensitive_policy",
+          "table": "tie_sensitive_operating_point",
+          "existing_artifacts": [
+            "datasets/model_outputs/qlora_3seed_epoch1_1024_summary/tie_sensitive_dev_selected_policy_audit.json",
+            "datasets/model_outputs/qlora_3seed_epoch1_1024_tie_sensitive_dev_summary/three_seed_summary.json"
+          ],
+          "command": ".venv_qlora/bin/python scripts/build_tie_sensitive_validation_reports.py --seeds 13 42 2026 --validation-template datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024/validation_report.json --calibrated-template datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024/calibrated_results.json --output-template datasets/model_outputs/bea_judge_qlora_pairwise_seed{seed}_epoch1_1024_tie_sensitive_dev",
+          "metrics": [
+            "accuracy",
+            "macro_f1",
+            "ece",
+            "tie_recall"
+          ],
+          "gate": {
+            "tie_recall_must_exceed_current_bea_judge": true,
+            "macro_f1_must_exceed_current_bea_judge": true,
+            "all_three_seed_gates_pass": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "calibration_ablation",
+      "priority": "P1",
+      "purpose": "Verify that temperature/fusion calibration improves ECE without masking classification regressions.",
+      "experiments": [
+        {
+          "id": "calibration_methods_pairwise",
+          "table": "calibration_ablation",
+          "existing_artifacts": [
+            "datasets/model_outputs/latest_calibration_comparison"
+          ],
+          "command": ".venv_qlora/bin/python scripts/bea_judge_ablation.py --extend-existing-report datasets/model_outputs/latest_ablation_report.json --judge-output datasets/judge_outputs/m_prometheus_3b_bea10k_v2/base_scores.repaired.json --input datasets/processed/bea_judge_cleaned_10000.json --model-json datasets/model_outputs/bea_judge_20260521_110114/model.json --report-json datasets/model_outputs/frozen_four_module_ablation_extended/ablation_report.json",
+          "metrics": [
+            "nll",
+            "brier",
+            "ece",
+            "macro_f1"
+          ],
+          "gate": {
+            "selected_method_ece_min_or_statistically_tied": true,
+            "selected_method_macro_f1_drop_max": 0.005
+          }
+        }
+      ]
+    },
+    {
+      "id": "stress_and_error_analysis",
+      "priority": "P2",
+      "purpose": "Support reviewer-facing claims about bias awareness, evidence factuality, and residual error modes.",
+      "experiments": [
+        {
+          "id": "bias_and_order_swap_probe",
+          "table": "bias_stress",
+          "existing_artifacts": [
+            "datasets/bias_awareness_report.json"
+          ],
+          "command": ".venv_qlora/bin/python scripts/order_swap_probe.py",
+          "metrics": [
+            "flip_rate",
+            "position_bias_rate",
+            "review_capture_rate"
+          ],
+          "gate": {
+            "used_for_error_analysis_not_headline_claim": true
+          }
+        },
+        {
+          "id": "evidence_factuality_feature_groups",
+          "table": "evidence_feature_ablation",
+          "existing_artifacts": [
+            "datasets/model_outputs/sci_tables_v2_20260521_110114/evidence_feature_group_ablation_table.md",
+            "datasets/evidence_fact_report.json"
+          ],
+          "command": ".venv_qlora/bin/python scripts/bea_judge_ablation.py --judge-output datasets/judge_outputs/m_prometheus_3b_bea10k_v2/base_scores.repaired.json --input datasets/processed/bea_judge_cleaned_10000.json --model-json datasets/model_outputs/bea_judge_20260521_110114/model.json --report-json datasets/model_outputs/frozen_evidence_factuality_ablation/ablation_report.json",
+          "metrics": [
+            "factuality_accuracy",
+            "factuality_macro_f1",
+            "factuality_ece"
+          ],
+          "gate": {
+            "evidence_augmented_variant_must_improve_or_tie_text_only": true
+          }
+        }
+      ]
+    }
+  ]
+}

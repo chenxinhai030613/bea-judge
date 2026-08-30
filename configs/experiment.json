@@ -1,0 +1,133 @@
+{
+  "experiment_name": "bea_judge_10k_v2_formal_baseline",
+  "formal_baseline": {
+    "status": "frozen_for_sci_reporting",
+    "run_id": "bea_judge_20260521_110114",
+    "sci_tables_id": "sci_tables_v2_20260521_110114",
+    "input_dataset": "datasets\\processed\\bea_judge_cleaned_10000.json",
+    "base_scores": "datasets\\judge_outputs\\m_prometheus_3b_bea10k_v2\\base_scores.repaired.json",
+    "validation_report": "datasets\\model_outputs\\bea_judge_20260521_110114\\validation_report.json",
+    "calibrated_results": "datasets\\model_outputs\\bea_judge_20260521_110114\\calibrated_results.json",
+    "sci_results_index": "datasets\\model_outputs\\sci_tables_v2_20260521_110114\\sci_results_index.json"
+  },
+  "environment": {
+    "venv": "judge",
+    "python": "judge\\Scripts\\python.exe",
+    "config": "configs\\environment_judge.json"
+  },
+  "input_dataset": "datasets\\processed\\bea_judge_cleaned_10000.json",
+  "split_policy": {
+    "train": "Use records whose split field is train.",
+    "dev": "Use only for hyperparameter selection, temperature scaling, review thresholds, and Tie policy.",
+    "test": "Reserved for final evaluation; never used for threshold or policy selection."
+  },
+  "model_structure": {
+    "implementation": "src\\bea_judge_train.py",
+    "positioning": "Bias-aware and evidence-augmented judge calibration framework built on real M-Prometheus-3B outputs; not a fine-tuned LLM.",
+    "heads": {
+      "pairwise": {
+        "labels": [
+          "A>B",
+          "B>A",
+          "Tie"
+        ],
+        "features": [
+          "real M-Prometheus-3B base scores, score margin, and predicted-label indicators",
+          "answer length, sentence, bullet, numeric and overlap differences",
+          "bias indicators and bias-risk features for position, length, format and rubric sensitivity",
+          "dataset, task and scoring-system one-hot features",
+          "dev-selected pairwise Tie policy and review threshold"
+        ]
+      },
+      "factuality": {
+        "labels": [
+          "supported",
+          "unsupported",
+          "ambiguous"
+        ],
+        "active_label_policy": "Train only labels present in train/dev to avoid penalizing absent classes.",
+        "features": [
+          "prompt, context, reference and answer length statistics",
+          "answer-context, answer-reference and prompt-context overlap",
+          "deterministic evidence features: sentence support, numeric/date/entity gaps, negation/comparative mismatch, support delta and evidence risk",
+          "dataset, task and scoring-system one-hot features"
+        ],
+        "audit_only_features": [
+          "low-support anchored entity/date/numeric gap diagnostics are retained for evidence subtype reporting but excluded from the formal factuality head."
+        ]
+      }
+    },
+    "classifier": "Task-specific softmax classifiers with standardized numeric features.",
+    "post_selection_calibration": {
+      "method": "Temperature scaling selected on dev NLL + ECE + 0.25*Brier.",
+      "outputs": [
+        "final_score",
+        "predicted_label",
+        "confidence",
+        "risk_score",
+        "review_flag",
+        "review_reason",
+        "label_probabilities"
+      ],
+      "review_policy": "Low-confidence review threshold selected on dev."
+    }
+  },
+  "hyperparameter_search": {
+    "learning_rate": [
+      0.08,
+      0.04,
+      0.02,
+      0.01
+    ],
+    "batch_size": [
+      16,
+      32,
+      64
+    ],
+    "l2": [
+      0.0,
+      0.0001,
+      0.001,
+      0.005
+    ],
+    "epochs": [
+      80,
+      140
+    ],
+    "selection_objective": "macro_f1 + 0.25*accuracy - 0.05*ECE"
+  },
+  "formal_gates": {
+    "sample_count_range": [
+      9500,
+      10200
+    ],
+    "pairwise_base_coverage": "6946 / 6946",
+    "heuristic_rows": 0,
+    "unresolved_parse_failures": 0,
+    "pairwise_macro_f1_min": 0.66,
+    "tie_recall_min": 0.5,
+    "factuality_macro_f1_min": 0.74,
+    "factuality_ece_max": 0.04,
+    "ragtruth_macro_f1_current_floor": 0.63
+  },
+  "latest_outputs": {
+    "validation_report": "datasets\\model_outputs\\latest_validation_report.json",
+    "calibrated_results": "datasets/model_outputs/bea_judge_qlora_pairwise_seed2026_sft50_epoch1_1024/calibrated_results.json",
+    "run_directory": "datasets/model_outputs/bea_judge_qlora_pairwise_seed2026_sft50_epoch1_1024",
+    "sci_tables": "datasets\\model_outputs\\sci_tables_v2_20260521_110114",
+    "ablation_report": "datasets\\model_outputs\\latest_ablation_report.json"
+  },
+  "reporting_constraints": {
+    "do_claim": [
+      "Evidence augmentation is the main factuality reliability contribution.",
+      "Calibration and Tie policy improve pairwise decision stability.",
+      "Bias profiling supports risk control and review prioritization."
+    ],
+    "do_not_claim": [
+      "BEA-Judge fine-tunes or trains a new large language judge.",
+      "The bias module significantly improves overall accuracy.",
+      "RAGTruth is solved at atomic-claim verification granularity.",
+      "Heuristic fallback contributes to formal SCI results."
+    ]
+  }
+}

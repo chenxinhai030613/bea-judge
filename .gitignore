@@ -1,0 +1,48 @@
+# Local runtime and downloaded dependency trees
+judge/
+_deps/
+.venv/
+.venv*/
+venv/
+
+# Local agent/editor state
+.claude/
+.codegraph/
+.idea/
+.vscode/
+
+# Downloaded model weights and Hugging Face artifacts
+models/
+
+# Generated datasets and experiment outputs can be rebuilt or are too large for Git
+datasets/raw/
+datasets/processed/
+datasets/splits/
+datasets/splits_zh/
+datasets/sft/
+datasets/judge_outputs/
+datasets/model_outputs/
+datasets/*.json
+datasets/*.jsonl
+datasets/结果/
+datasets/方案2/raw_cache/
+datasets/方案2/academic_research_raw_qa.json
+datasets/方案2/academic_research_raw_qa.jsonl
+datasets/方案2/splits/
+
+# Historical working material and generated paper files
+archive/
+logs/
+*.docx
+*.pdf
+
+# Python cache files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Office temporary lock files
+~$*
+
+# Local planning notes
+docs/superpowers/

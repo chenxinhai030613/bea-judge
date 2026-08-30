@@ -1,0 +1,27 @@
+{
+  "environment_name": "judge",
+  "python": "3.11.9",
+  "creation_command": "python -m venv judge --system-site-packages",
+  "activation_command_windows": "judge\\Scripts\\Activate.ps1",
+  "runtime_command": "judge\\Scripts\\python.exe",
+  "required_packages": {
+    "numpy": "available via system-site-packages",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.8.0",
+    "accelerate": "1.13.0"
+  },
+  "default_backbone": {
+    "name": "M-Prometheus-3B",
+    "model_path": "Unbabel/M-Prometheus-3B",
+    "backend": "m_prometheus"
+  },
+  "notes": [
+    "The default base judge backbone is M-Prometheus-3B via Unbabel/M-Prometheus-3B.",
+    "Prometheus-family backends require torch, transformers, and accelerate.",
+    "Current PyTorch build has CUDA 12.8 support and detects the NVIDIA GeForce RTX 4070 Laptop GPU.",
+    "The 8 GB GPU may require device_map=auto CPU offload for M-Prometheus-3B when desktop applications are also using VRAM.",
+    "If Hugging Face TLS or network access is unavailable, set model_path to a local directory containing config.json and model weights.",
+    "The current lightweight training pipeline avoids network-dependent packages.",
+    "scikit-learn and scipy are not required for this lightweight implementation."
+  ]
+}

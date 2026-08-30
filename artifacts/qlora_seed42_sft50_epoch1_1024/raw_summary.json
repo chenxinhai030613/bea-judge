@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-05-29T03:23:14.969141+00:00",
+  "judge": {
+    "name": "m_prometheus_3b_qlora_pairwise",
+    "backend": "m_prometheus_qlora"
+  },
+  "backend_status": {
+    "available": true,
+    "backend": "m_prometheus_qlora",
+    "base_model": "/data/bea-judge/1论文写作/models/M-Prometheus-3B",
+    "adapter": "/data/bea-judge/1论文写作/models/m_prometheus_3b_qlora_pairwise_seed42_sft50_epoch1_1024",
+    "device_map": "auto",
+    "torch_cuda_available": true,
+    "max_new_tokens": 16,
+    "retry_max_new_tokens": 96
+  },
+  "sample_count": 1053,
+  "parse_failure_count": 0,
+  "overall": {
+    "pairwise_accuracy": 0.7863,
+    "tie_rate": 0.0247
+  },
+  "coverage": {
+    "total_pairwise_samples": 1053,
+    "parsed_rows": 1053,
+    "failed_rows": 0,
+    "parse_success_rate": 1.0
+  }
+}

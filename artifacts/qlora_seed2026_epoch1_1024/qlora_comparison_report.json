@@ -1,0 +1,63 @@
+{
+  "comparison_rows": [
+    {
+      "system": "Raw M-Prometheus-3B",
+      "base": "frozen",
+      "four_module": "no",
+      "accuracy": 0.5624,
+      "macro_f1": 0.4079,
+      "ece": "",
+      "tie_recall": ""
+    },
+    {
+      "system": "Current BEA-Judge",
+      "base": "frozen",
+      "four_module": "yes",
+      "accuracy": 0.7512,
+      "macro_f1": 0.673,
+      "ece": 0.0558,
+      "tie_recall": 0.5231
+    },
+    {
+      "system": "QLoRA-M-Prometheus-3B",
+      "base": "qlora",
+      "four_module": "no",
+      "accuracy": 0.814815,
+      "macro_f1": 0.6672,
+      "ece": 0.1923,
+      "tie_recall": 0.184615
+    },
+    {
+      "system": "QLoRA-BEA-Judge",
+      "base": "qlora",
+      "four_module": "yes",
+      "accuracy": 0.8053,
+      "macro_f1": 0.7184,
+      "ece": 0.0274,
+      "tie_recall": 0.4769
+    }
+  ],
+  "raw_qlora_metrics": {
+    "n": 1053,
+    "accuracy": 0.814815,
+    "macro_f1": 0.6672,
+    "ece": 0.1923,
+    "tie_recall": 0.184615,
+    "parse_failure_rate": 0.0,
+    "pred_label_distribution": {
+      "A>B": 775,
+      "B>A": 251,
+      "Tie": 27
+    }
+  },
+  "gate": {
+    "passed": false,
+    "checks": {
+      "qlora_raw_macro_f1_gain_min_0_10": true,
+      "qlora_bea_macro_f1_gain_min_0_02": true,
+      "tie_recall_not_below_baseline": false,
+      "ece_max_0_06": true,
+      "raw_qlora_parse_failure_max_0_01": true
+    }
+  }
+}

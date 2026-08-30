@@ -1,0 +1,17 @@
+{
+  "formal_results": {
+    "sci_tables": "datasets/model_outputs/sci_tables_v2_20260521_110114/",
+    "qlora_submission_ready": "datasets/model_outputs/qlora_3seed_epoch1_1024_summary/qlora_submission_ready_results.json",
+    "qlora_tie_sensitive": "datasets/model_outputs/qlora_3seed_epoch1_1024_tie_sensitive_dev_summary/three_seed_summary.json"
+  },
+  "qlora_gate_reports": {
+    "seed13": "datasets/model_outputs/qlora_comparison_seed13_epoch1_1024/claim_gate_report.json",
+    "seed42": "datasets/model_outputs/qlora_comparison_seed42_epoch1_1024/claim_gate_report.json",
+    "seed2026": "datasets/model_outputs/qlora_comparison_seed2026_epoch1_1024/claim_gate_report.json"
+  },
+  "known_limitations": [
+    "datasets/judge_outputs/latest_summary.json is a probe summary and must not be cited as a formal experiment conclusion.",
+    "QLoRA conservative gate remains false because tie_recall_not_below_baseline does not pass for all seeds.",
+    "Optional dependencies python-docx and matplotlib are required only for DOCX/report and reliability diagram regeneration."
+  ]
+}

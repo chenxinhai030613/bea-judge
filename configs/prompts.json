@@ -1,0 +1,94 @@
+{
+  "base_judge_prompt_version": "m_prometheus_pairwise_v1",
+  "base_judge_prompt_style": "pairwise_and_direct",
+  "m_prometheus_pairwise_v1": {
+    "required_sections": [
+      "###Task Description:",
+      "###The instruction to evaluate:",
+      "###Response A:",
+      "###Response B:",
+      "###Reference Answer:",
+      "###Score Rubric:",
+      "###Feedback:"
+    ],
+    "result_marker": "[RESULT] A | [RESULT] B | [RESULT] Tie",
+    "rubric_dimensions": [
+      "relevance",
+      "completeness",
+      "factuality",
+      "instruction_following",
+      "clarity",
+      "safety"
+    ]
+  },
+  "m_prometheus_direct_v1": {
+    "required_sections": [
+      "###Task Description:",
+      "###The instruction to evaluate:",
+      "###Response:",
+      "###Reference Answer:",
+      "###Score Rubric:",
+      "###Output JSON Schema:",
+      "###Feedback:"
+    ],
+    "output_format": "strict JSON",
+    "score_range": "1-5",
+    "rubric_dimensions": [
+      "relevance",
+      "completeness",
+      "factuality",
+      "instruction_following",
+      "clarity",
+      "safety",
+      "overall_score"
+    ]
+  },
+  "prometheus2_pairwise_v1": {
+    "required_sections": [
+      "###Task Description:",
+      "###The instruction to evaluate:",
+      "###Response A:",
+      "###Response B:",
+      "###Reference Answer:",
+      "###Score Rubric:",
+      "###Feedback:"
+    ],
+    "result_marker": "[RESULT] A | [RESULT] B | [RESULT] Tie",
+    "rubric_dimensions": [
+      "relevance",
+      "completeness",
+      "factuality",
+      "instruction_following",
+      "clarity",
+      "safety"
+    ]
+  },
+  "prometheus2_direct_v1": {
+    "required_sections": [
+      "###Task Description:",
+      "###The instruction to evaluate:",
+      "###Response:",
+      "###Reference Answer:",
+      "###Score Rubric:",
+      "###Output JSON Schema:",
+      "###Feedback:"
+    ],
+    "output_format": "strict JSON",
+    "score_range": "1-5",
+    "rubric_dimensions": [
+      "relevance",
+      "completeness",
+      "factuality",
+      "instruction_following",
+      "clarity",
+      "safety",
+      "overall_score"
+    ]
+  },
+  "notes": [
+    "Keep the rubric fixed across runs.",
+    "Do not change prompt wording without version bump.",
+    "M-Prometheus pairwise output must be parsed from the final [RESULT] marker.",
+    "Prometheus 2 prompt versions are retained for legacy experiment compatibility."
+  ]
+}

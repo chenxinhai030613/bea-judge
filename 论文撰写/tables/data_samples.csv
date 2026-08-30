@@ -1,0 +1,4 @@
+id,dataset,task_type,prompt_excerpt,answer_a_excerpt,answer_b_excerpt,human_label,split
+"open_qa_3485","pandalm","open_qa","List the concepts that should be learned before approachin...","The concepts that should be learned before approaching the...","1. Machine Learning Theory 2. Neural Networks 3. Convoluti...","A>B","train"
+"judge_bias_0610","synthetic_perturbed","pairwise_bias","There is a 3\times3 grid with numbers between 1 and 9, inc...","Reformatted variant: - # YOUR CODE HERE from itertools imp...","# YOUR CODE HERE from itertools import permutations from f...","B>A","train"
+"factuality_rag_1064","ares_nq","factuality_rag","who was the first to say i'm going to disney world","Phil Simms","","supported","train"

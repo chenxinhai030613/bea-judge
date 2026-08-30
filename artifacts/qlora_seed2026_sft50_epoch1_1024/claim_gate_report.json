@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "checks": {
+    "qlora_raw_macro_f1_gain_min_0_10": true,
+    "qlora_bea_macro_f1_gain_min_0_02": true,
+    "tie_recall_not_below_baseline": false,
+    "ece_max_0_06": true,
+    "raw_qlora_parse_failure_max_0_01": true
+  }
+}
