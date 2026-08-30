@@ -15,9 +15,9 @@ from docx.shared import Cm, Inches, Pt, RGBColor
 
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = ROOT / "论文撰写"
+OUT_DIR = ROOT / "paper"
 FIG_DIR = OUT_DIR / "figures"
-DOCX_PATH = OUT_DIR / "BEA-Judge四模块模型框架学术说明.docx"
+DOCX_PATH = OUT_DIR / "bea_judge_four_module_framework.docx"
 FIG_PATH = FIG_DIR / "bea_judge_four_module_framework.png"
 
 

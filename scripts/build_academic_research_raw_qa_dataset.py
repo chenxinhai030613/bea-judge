@@ -2,7 +2,7 @@
 
 The script intentionally uses only the Python standard library for network
 access so it can run in the project environment without installing extra
-packages. It writes a reproducible 20k-ish dataset under datasets/方案2.
+packages. It writes a reproducible 20k-ish dataset under datasets/academic_research.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ except Exception:  # pragma: no cover - optional dependency fallback.
 
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_OUTPUT_DIR = ROOT / "datasets" / "方案2"
+DEFAULT_OUTPUT_DIR = ROOT / "datasets" / "academic_research"
 DEFAULT_CACHE_DIR = DEFAULT_OUTPUT_DIR / "raw_cache"
 SEED = 20260609
 RNG = random.Random(SEED)

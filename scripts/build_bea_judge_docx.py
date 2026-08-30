@@ -9,9 +9,9 @@ from xml.etree import ElementTree
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PAPER_DIR = ROOT / "论文撰写" / "BEA-Judge中文论文_20260530"
+PAPER_DIR = ROOT / "paper" / "bea_judge_manuscript"
 MANUSCRIPT = PAPER_DIR / "manuscript.md"
-OUT_DOCX = PAPER_DIR / "BEA-Judge中文论文_20260530.docx"
+OUT_DOCX = PAPER_DIR / "bea_judge_manuscript.docx"
 
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"

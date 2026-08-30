@@ -13,7 +13,7 @@ from xml.sax.saxutils import escape
 
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "论文撰写" / "QLoRA-BEA-Judge_epoch2_tie_rescue_20260605"
+OUT = ROOT / "paper" / "qlora_bea_judge_epoch2_tie_rescue_20260605"
 FIG = OUT / "figures"
 FIG_PNG = OUT / "figures_png"
 TAB = OUT / "tables"

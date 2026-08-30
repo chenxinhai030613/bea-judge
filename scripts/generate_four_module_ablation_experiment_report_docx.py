@@ -23,8 +23,8 @@ QLORA_SUMMARY = (
     / "qlora_ablation_3seed_epoch1_1024_summary"
     / "ablation_3seed_summary.json"
 )
-OUT_DIR = ROOT / "论文撰写"
-OUT_PATH = OUT_DIR / "BEA-Judge四模块消融实验报告.docx"
+OUT_DIR = ROOT / "paper"
+OUT_PATH = OUT_DIR / "bea_judge_four_module_ablation_report.docx"
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:

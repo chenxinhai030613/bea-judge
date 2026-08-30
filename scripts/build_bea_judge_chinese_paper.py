@@ -11,7 +11,7 @@ from typing import Iterable, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "论文撰写" / "BEA-Judge中文论文_20260530"
+OUT = ROOT / "paper" / "bea_judge_manuscript"
 FIG_DIR = OUT / "figures"
 VSDX_DIR = OUT / "vsdx"
 FORMAL = ROOT / "datasets" / "model_outputs" / "sci_tables_v2_20260521_110114"

@@ -11,7 +11,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ROOT = Path(__file__).resolve().parents[1]
 TABLE_DIR = ROOT / "datasets" / "model_outputs" / "sci_tables_v2_20260521_110114"
-OUT_DIR = ROOT / "论文撰写" / "figures_bea_judge_10k"
+OUT_DIR = ROOT / "paper" / "figures_bea_judge_10k"
 
 PALETTE = {
     "blue": "#4C78A8",

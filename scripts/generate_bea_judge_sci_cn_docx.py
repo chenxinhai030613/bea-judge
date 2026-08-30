@@ -10,10 +10,10 @@ from docx.shared import Cm, Inches, Pt
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = ROOT / "论文撰写"
+OUT_DIR = ROOT / "paper"
 FIG_DIR = OUT_DIR / "figures_bea_judge_10k"
-MD_PATH = OUT_DIR / "BEA-Judge-10K-v2_SCI中文论文初稿_公式图表文献增强版.md"
-DOCX_PATH = OUT_DIR / "BEA-Judge-10K-v2_SCI中文论文初稿_公式图表文献增强版.docx"
+MD_PATH = OUT_DIR / "bea_judge_sci_manuscript.md"
+DOCX_PATH = OUT_DIR / "bea_judge_sci_manuscript.docx"
 
 
 TITLE = "BEA-Judge-10K：面向大语言模型评价的偏差感知与证据增强校准框架"

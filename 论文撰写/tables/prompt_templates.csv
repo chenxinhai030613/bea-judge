@@ -1,3 +1,0 @@
-prompt_template,required_sections,output_constraint,rubric_dimensions
-"m_prometheus_pairwise_v1","###Task Description / ###The instruction to evaluate / ###Response A / ###Response B / ###Reference Answer / ###Score Rubric / ###Feedback","[RESULT] A | [RESULT] B | [RESULT] Tie","relevance; completeness; factuality; instruction_following; clarity; safety"
-"m_prometheus_direct_v1","###Task Description / ###The instruction to evaluate / ###Response / ###Reference Answer / ###Score Rubric / ###Output JSON Schema / ###Feedback","strict JSON or [RESULT] 1-5","relevance; completeness; factuality; instruction_following; clarity; safety; overall_score"

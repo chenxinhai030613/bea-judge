@@ -15,13 +15,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC_DOCX = ROOT / "论文撰写" / "BEA-Judge中文论文" / "BEA-Judge.docx"
-OUT_DIR = ROOT / "论文撰写" / "BEA-Judge中文论文" / "BEA-Judge_Morandi_SCI_assets"
+SRC_DOCX = ROOT / "paper" / "bea_judge_manuscript" / "bea_judge_manuscript.docx"
+OUT_DIR = ROOT / "paper" / "bea_judge_morandi_sci_assets"
 PNG_DIR = OUT_DIR / "png"
 SVG_DIR = OUT_DIR / "svg"
 PROMPT_DIR = OUT_DIR / "prompts"
 REPORT_DIR = OUT_DIR / "reports"
-DOCX_OUT = OUT_DIR / "BEA-Judge_Morandi_SCI.docx"
+DOCX_OUT = OUT_DIR / "bea_judge_morandi_sci.docx"
 
 
 PALETTE = {

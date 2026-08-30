@@ -14,8 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 PAPER = ROOT / "paper_ieee_bea_judge"
 FORMAL = ROOT / "datasets" / "model_outputs" / "sci_tables_v2_20260521_110114"
 EXTENDED = ROOT / "datasets" / "model_outputs" / "sci_tables_extended_20260522"
-MD = PAPER / "BEA-Judge_IEEE中文论文_Word源.md"
-DOCX = PAPER / "BEA-Judge_IEEE中文论文.docx"
+MD = PAPER / "bea_judge_ieee_word_source.md"
+DOCX = PAPER / "bea_judge_ieee.docx"
 CSL = Path("D:/texlive/2026/texmf-dist/tex/latex/citation-style-language/styles/ieee.csl")
 
 

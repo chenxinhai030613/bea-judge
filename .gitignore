@@ -25,14 +25,15 @@ datasets/model_outputs/
 datasets/*.json
 datasets/*.jsonl
 datasets/结果/
-datasets/方案2/raw_cache/
-datasets/方案2/academic_research_raw_qa.json
-datasets/方案2/academic_research_raw_qa.jsonl
-datasets/方案2/splits/
+datasets/*/raw_cache/
+datasets/*/academic_research_raw_qa.json
+datasets/*/academic_research_raw_qa.jsonl
+datasets/*/splits/
 
 # Historical working material and generated paper files
 archive/
 logs/
+paper/
 *.docx
 *.pdf
 

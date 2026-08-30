@@ -1,7 +1,0 @@
-variant,head,split,accuracy,macro-F1,ECE,Tie recall,parse failure rate
-"Full BEA-Judge","pairwise","test","0.7512","0.6730","0.0558","0.5231","--"
-"w/o Bias Module","pairwise","test","0.7654","0.6892","0.0385","0.5462","--"
-"w/o Evidence Module","pairwise","test","0.7531","0.6711","0.0540","0.5000","--"
-"w/o Calibration","pairwise","test","0.7407","0.6402","0.0459","0.3923","--"
-"Full BEA-Judge","factuality","test","0.7649","0.7405","0.0377","--","--"
-"w/o Evidence Module","factuality","test","0.6928","0.6542","0.0221","--","--"

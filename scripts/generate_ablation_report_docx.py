@@ -30,7 +30,7 @@ except ImportError:  # pragma: no cover - exercised when optional dependency is 
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_TITLE = "BEA-Judge-10K-v2 消融实验结果报告"
-DEFAULT_OUTPUT = ROOT / "论文撰写" / "BEA-Judge-10K-v2_消融实验结果报告.docx"
+DEFAULT_OUTPUT = ROOT / "paper" / "bea_judge_ablation_report.docx"
 
 CORE_TABLES = {
     "ablation": "ablation_table.csv",
